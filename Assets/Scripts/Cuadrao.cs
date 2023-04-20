@@ -4,36 +4,50 @@ using UnityEngine;
 
 public class Cuadrao : MonoBehaviour
 {
-    public float velocidad = 5f;
     private Rigidbody2D mi;
+    private float movFu=150f;
     // Start is called before the first frame update
     void Start()
     {
-        mi=GetComponent<Rigidbody2D>(); 
+        mi=GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.W))
-        {
-            transform.position += new Vector3(0, 1f, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            transform.position += new Vector3(0, -1f, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            transform.position += new Vector3(-1f, 0, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            transform.position += new Vector3(1f, 0, 0);
-        }*/
-        float horizontal = Input.GetAxis("Horizontal");
-        //float vertical = Input.GetAxis("Vertical");
+        float movX = 0;
+        movX = caminar(movX);
+        voltearPersonaje(movX);
 
-        transform.position += new Vector3(horizontal, 0) * Time.deltaTime * velocidad;
+    }
+
+    float caminar(float movX)
+    {
+        movX= Input.GetAxisRaw("Horizontal");
+        Vector2 posicionJug = transform.position;
+
+        posicionJug = posicionJug + new Vector2(movX, 0f) * movFu * Time.deltaTime;
+
+        transform.position = posicionJug;
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            mi.AddForce(new Vector2(0f, movFu), ForceMode2D.Impulse);
+        }
+
+        return movX;
+    }
+
+    void voltearPersonaje(float movX)
+    {
+        if (movX<0)
+        {
+            transform.localScale = new Vector3(-13.2f, 14, 1);
+        }
+        if (movX > 0)
+        {
+            transform.localScale = new Vector3(13.2f, 14, 1);
+        }
     }
 }
